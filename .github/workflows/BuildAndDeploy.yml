@@ -5,7 +5,7 @@ env:
   OUTPUT_LOCATION: "dist" # location of client code build output
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
   
 permissions:
