@@ -61,7 +61,7 @@ jobs:
      - name: deploy
        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9
        with:
-        azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_COAST_050C2C10 }}
+        azure_static_web_apps_api_token: e2100d71d8679ce534ef29252ca778b35333024f748a7f39935d648deb6f3a453-38315127-8f6b-48e5-8328-ca891d3d105700075980
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         action: "upload"
         app_location: ${{ env.APP_LOCATION }}
