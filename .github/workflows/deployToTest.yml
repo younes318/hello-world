@@ -15,14 +15,15 @@ permissions:
   contents: read
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment:
       name: testing
     runs-on: ubuntu-latest
     steps:
      - name: Download artifacts
-       uses: actions/download-artifact@v3
+       uses: dawidd6/action-download-artifact@v2
        with:
-          name: my-artifact
+          workflow: ${{ github.event.workflow_run.workflow_id }}
           
      - name: deploy
        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9
