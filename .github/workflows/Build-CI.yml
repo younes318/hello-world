@@ -50,8 +50,8 @@ jobs:
   get-PR-number:
     name: get pull request info
     runs-on: ubuntu-latest
-    outputs:
-      pr_number: ${{ steps.get_pr_number.outputs.result }}
+    #outputs:
+      #pr_number: ${{ steps.get_pr_number.outputs.result }}
     steps:      
       - uses: actions/github-script@v6
         id: get_pr_number
