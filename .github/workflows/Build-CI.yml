@@ -69,6 +69,8 @@ jobs:
                 ).data[0];
               }
           result-encoding: string
+      - name: Issue number
+        run: echo '${{steps.get_issue_number.outputs.result}}'
   
   notify-build:
     name: notify build
