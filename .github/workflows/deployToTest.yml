@@ -23,6 +23,8 @@ jobs:
        uses: actions/download-artifact@v3
        with:
           name: my-artifact
+          workflow: Build-CI
+          workflow_conclusion: success
           path: .
           
      - name: deploy
