@@ -1,11 +1,12 @@
 name: deploy to test
+
 env:
   APP_LOCATION: "/" # location of your client code
   API_LOCATION: "api" # location of your api source code - optional
   OUTPUT_LOCATION: "dist" # location of client code build output
 on:
   workflow_run:
-    workflows: ["Build and Deploy"]
+    workflows: ["Build-CI"]
     types:
       - completed
   
