@@ -50,32 +50,21 @@ jobs:
   get-PR-number:
     name: get pull request info
     runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.set_pr_number.outputs.pr_number }}
     steps:      
       - uses: actions/github-script@v6
         id: get_issue_number
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-              if (context.issue.number) {
-                // Return issue number if present
-                return context.issue.number;
-              } else {
-                // Otherwise return issue number from commit
-                return (
-                  await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                    commit_sha: context.sha,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                  })
-                ).data[0];
-              }
-          result-encoding: string
-      - name: Issue number
-        run: echo '${{steps.get_issue_number.outputs.result}}'
-  
+            const prNumber = context.payload.pull_request.number;
+            console.log(`::set-output name=pr_number::${prNumber}`);
+            
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, get-PR-number]
     steps:
       - run: |
          curl 
@@ -84,7 +73,7 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/younis318/hello-world/issues/${{ steps.get_issue_number.outputs.result }}/comments \
+          https://api.github.com/repos/younis318/hello-world/issues/${{ needs.get_pr_number.outputs.pr_number }}/comments \
           -d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}"}'
   # testing:
   #   name: Deploy to testing
