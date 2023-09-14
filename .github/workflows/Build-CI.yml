@@ -54,7 +54,7 @@ jobs:
       pr_number: ${{ steps.set_pr_number.outputs.pr_number }}
     steps:      
       - uses: actions/github-script@v6
-        id: get_issue_number
+        id: set_pr_number
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
