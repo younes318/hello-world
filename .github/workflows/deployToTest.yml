@@ -23,6 +23,7 @@ jobs:
      - name: Download artifacts
        uses: dawidd6/action-download-artifact@v2
        with:
+          name: my-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
           
      - name: deploy
