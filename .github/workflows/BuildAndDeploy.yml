@@ -4,8 +4,8 @@ env:
   API_LOCATION: "api" # location of your api source code - optional
   OUTPUT_LOCATION: "dist" # location of client code build output
 on:
-  push:
-    branches: [ "main" ]
+  #push:
+    #branches: [ "main" ]
   workflow_dispatch:
   
 permissions:
@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: my-artifact
-        path: ./artifacts
+        path: .
 
   # testing:
   #   name: Deploy to testing
