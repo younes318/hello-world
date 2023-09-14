@@ -68,7 +68,7 @@ jobs:
                 })
               ).data[0].number;
             }
-         result-encoding: string
+        result-encoding: string
   
   notify-build:
     name: notify build
