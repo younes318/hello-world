@@ -56,7 +56,7 @@ jobs:
       - uses: actions/github-script@v6
         id: set_pr_number
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+            
             script: |
               if (context.issue.number) {
                 // Return issue number if present
