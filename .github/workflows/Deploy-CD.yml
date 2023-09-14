@@ -37,6 +37,21 @@ jobs:
         app_location: ${{ env.APP_LOCATION }}
         api_location: ${{ env.API_LOCATION }}
         output_location: ${{ env.OUTPUT_LOCATION }}
+  notify-testing:
+    name: notify testing deployed
+    runs-on: ubuntu-latest
+    needs: deploy-to-testing
+    steps:
+    - run: |
+        curl 
+          -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/younis318/hello-world/issues/${{ github.event.number }}/comments \
+          -d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and deployed to testing with status ${{ job.status }}"}' 
+   
   deploy-to-staging:
     name: Deploy to staging
     needs: deploy-to-testing
@@ -60,6 +75,21 @@ jobs:
          api_location: ${{ env.API_LOCATION }}
          output_location: ${{ env.OUTPUT_LOCATION }}
 
+  notify-staging:
+    name: notify staging deployed
+    runs-on: ubuntu-latest
+    needs: deploy-to-staging
+    steps:
+      - run: |
+         curl 
+          -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/younis318/hello-world/issues/${{ github.event.number }}/comments \
+          -d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and deployed to staging with status ${{ job.status }}"}'
+
   deploy-to-production:
      name: Deploy to production
      needs: deploy-to-staging
@@ -82,14 +112,17 @@ jobs:
            app_location: ${{ env.APP_LOCATION }}
            api_location: ${{ env.API_LOCATION }}
            output_location: ${{ env.OUTPUT_LOCATION }}
-  notify:
-    name: notify
+  notify-production:
+    name: notify production deployed
     runs-on: ubuntu-latest
     needs: deploy-to-production
     steps:
       - run: |
-         curl -X POST \
+         curl 
+          -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"body": "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and deployed to production with status ${{ job.status }}"}' \
-          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/younis318/hello-world/issues/${{ github.event.number }}/comments \
+          -d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and deployed to production with status ${{ job.status }}"}'
