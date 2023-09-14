@@ -51,10 +51,10 @@ jobs:
     name: get pull request info
     runs-on: ubuntu-latest
     outputs:
-      pr_number: ${{ steps.set_pr_number.outputs.result }}
+      pr_number: ${{ steps.get_pr_number.outputs.result }}
     steps:      
       - uses: actions/github-script@v6
-        id: set_pr_number
+        id: get_pr_number
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
