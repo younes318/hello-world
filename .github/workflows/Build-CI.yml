@@ -72,7 +72,7 @@ jobs:
                 ).data[0];
               }
               result-encoding: string
-              echo "PR Number in another job: ${{needs.get_pr_number.outputs.pr_number}}"
+              echo "PR Number in another job: ${{steps.get_pr_number.outputs.result}}"
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
