@@ -73,7 +73,7 @@ jobs:
               }
               result-encoding: string
       - name: Issue number
-        run: echo 'PR Number ${{steps.get_pr_number.outputs.result}}'
+        run: echo "PR Number ${{ steps.get_pr_number.outputs.result }}"
         
   notify-build:
     name: notify build
