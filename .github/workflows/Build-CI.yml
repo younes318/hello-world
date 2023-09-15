@@ -54,18 +54,19 @@ jobs:
       pr_number: ${{ steps.get_pr_number.outputs.prNumber }}
     steps:      
       - uses: actions/github-script@v6
-        id: get_pr_number
+        id: get_pr_number        
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
               const commitSha = github.event.commits[0].sha;
+              const prNumber ="";
               const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               commit_sha,
               owner: github.context.repo.owner,
               repo: github.context.repo.repo
                   });
               if (prs.length > 0) {
-                const prNumber = prs[0].number;
+                prNumber = prs[0].number;
                 echo "The PR number is ${{ prNumber }}";
               } else {
                 echo "There is no PR associated with the push commit";
