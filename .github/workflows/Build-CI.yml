@@ -50,9 +50,9 @@ jobs:
   get-PR-number:
     name: get pull request info
     runs-on: ubuntu-latest    
-    steps:      
-      - uses: actions/github-script@v6
-        id: get_pr_number        
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v6        
         with:
             script: |
               const commitSha = github.event.commits[0].sha;
