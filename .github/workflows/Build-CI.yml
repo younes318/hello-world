@@ -77,10 +77,10 @@ jobs:
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
-    needs: [build, get-PR-number]
-    env:
-      PR_Number: ${{ needs.get_pr_number.outputs.pr_number }}      
+    needs: [build, get-PR-number]         
     steps:
+      - env:
+          PR_Number: ${{ needs.get_pr_number.outputs.pr_number }} 
       - run: echo 'Input PR is ${{ env.PR_Number }}'
       - uses: actions/github-script@v6
         with:
