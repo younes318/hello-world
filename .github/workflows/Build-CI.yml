@@ -78,18 +78,20 @@ jobs:
     name: notify build
     runs-on: ubuntu-latest
     needs: [build, get-PR-number]
+    env:
+      PR_Number: ${{ needs.get_pr_number.outputs.pr_number }}
     steps:
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-            if(${{ needs.get_pr_number.outputs.pr_number }} && ${{ needs.get_pr_number.outputs.pr_number }} != "")
+            if(${process.env.PR_Number} && ${process.env.PR_Number} != "")
             {
               await github.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: ${{ needs.get_pr_number.outputs.pr_number }},
+                issue_number: ${process.env.PR_Number},
                 body: commentBody,
                 });
              }
