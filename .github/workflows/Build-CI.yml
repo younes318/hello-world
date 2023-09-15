@@ -96,7 +96,7 @@ jobs:
              }
              else
              {
-               console.log(`PR number not found`);
+               console.log("PR number not found");
              }
           
      #- run: |
