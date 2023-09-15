@@ -65,13 +65,13 @@ jobs:
               repo: github.context.repo.repo
                   });
               if (prs.length > 0) {
-                echo "The PR number is $prs[0].number";
                 return prs[0].number;
               } else {
                 echo "There is no PR associated with the push commit";
                 return "";
               }
               result-encoding: string
+            run: echo "The PR number is ${{ steps.get_pr_number.outputs.result }}"
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
