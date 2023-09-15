@@ -59,17 +59,22 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data } = await github.repos.listPullRequestsAssociatedWithCommit({
+            const { octokit } = require('@octokit/rest');
+            const github = octokit({
+              auth: process.env.GITHUB_TOKEN,
+            });
+
+            const { data } = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: context.sha,
+              head: context.sha,
             });
-          
+
             if (data.length > 0) {
               console.log(`::set-output name=pr_number::${data[0].number}`);
             } else {
               console.log("No associated PR found.");
-            }        
+            }       
       - run: echo "The PR number is ${{ steps.get_pr_number.outputs.pr_number }}"
     
   notify-build:
