@@ -55,7 +55,7 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const pr_number = "";
+            let pr_number = "";
             if (context.issue.number) {
                 pr_number = context.issue.number;
             } else {  
