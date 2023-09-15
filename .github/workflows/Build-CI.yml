@@ -57,6 +57,7 @@ jobs:
           pr_number: ""
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
           script: |            
             if (context.issue.number) {
                 process.env.pr_number = context.issue.number;
