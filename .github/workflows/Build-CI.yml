@@ -77,7 +77,7 @@ jobs:
                           body: commentBody,
                       });
             }
-            console.log("PR number is: ${pr_number} ");
+            console.log('PR number is: ${pr_number}');
 
   # testing:
   #   name: Deploy to testing
