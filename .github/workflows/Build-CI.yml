@@ -62,11 +62,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { octokit } = require('@octokit/rest');
-            const github = octokit({
+            const mygithub = octokit({
               auth: process.env.GITHUB_TOKEN,
             });
 
-            const { data } = await github.pulls.list({
+            const { data } = await mygithub.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: context.sha,
