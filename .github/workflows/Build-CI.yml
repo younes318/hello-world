@@ -71,7 +71,8 @@ jobs:
                 return "";
               }
               result-encoding: string
-            run: echo "The PR number is"
+      - run: echo "The PR number is"
+    
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
