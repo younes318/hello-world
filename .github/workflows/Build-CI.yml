@@ -60,7 +60,7 @@ jobs:
             if (context.issue.number) {
                 return context.issue.number;
             } else {  
-              const data = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
                                       commit_sha: context.sha,
                                       owner: context.repo.owner,
                                       repo: context.repo.repo,
