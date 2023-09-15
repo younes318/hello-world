@@ -49,44 +49,70 @@ jobs:
 
   get-PR-number:
     name: get pull request info
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
     outputs:
-      pr_number: ${{ steps.get_pr_number.outputs.result }}
-    steps:      
+      pr_number: ${{ steps.extract_pr_number.outputs.result }}      
+    steps:
       - uses: actions/github-script@v6
-        id: get_pr_number        
+        id: extract_pr_number
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const commitSha = github.event.commits[0].sha;
-              const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              commit_sha,
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo
-                  });
-              if (prs.length > 0) {
-                return prs[0].number;
-              } else {
-                echo "There is no PR associated with the push commit";
-                return "";
-              }
-              result-encoding: string
-      - run: echo "The PR number is ${{ steps.get_pr_number.outputs.result }}"
+          script: |
+            if (context.issue.number) {
+                return context.issue.number;
+            } else {  
+              const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                                      commit_sha: context.sha,
+                                      owner: context.repo.owner,
+                                      repo: context.repo.repo,
+                                    });
+                    if(data[0])
+                      return data[0].number;
+                    else
+                      return "";
+            }
+          result-encoding: string
+      - name: Issue number
+        run: echo '${{ steps.extract_pr_number.outputs.result }}'
     
   notify-build:
     name: notify build
     runs-on: ubuntu-latest
     needs: [build, get-PR-number]
+    env:
+      PR_Number: ${{ needs.get_pr_number.outputs.pr_number }}      
     steps:
-      - run: |
-         curl 
-          -L \
-          -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/younis318/hello-world/issues/${{ needs.get_pr_number.outputs.pr_number }}/comments \
-          -d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}"}'
+      - run: echo 'Input PR is ${{ env.PR_Number }}'
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr_number = process.env.PR_Number;
+            console.log(`pr number is: ${pr_number}`);
+             const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
+              if((pr_number) && pr_number != "")
+              {
+                await github.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr_number,
+                  body: commentBody,
+                  });
+               }
+               else
+               {
+                 console.log("PR number not found");
+               }
+            
+          
+     #- run: |
+     #    curl 
+      #    -L \
+       #   -X POST \
+        #  -H "Accept: application/vnd.github+json" \
+         # -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          #-H "X-GitHub-Api-Version: 2022-11-28" \
+          #https://api.github.com/repos/younis318/hello-world/issues/${{ needs.get_pr_number.outputs.pr_number }}/comments \
+          #-d '{"body":"Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}"}'
   # testing:
   #   name: Deploy to testing
   #   needs: build
