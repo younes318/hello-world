@@ -51,7 +51,7 @@ jobs:
     name: get pull request info
     runs-on: ubuntu-latest 
     outputs:
-      pr_number: ${{ steps.extract_pr_number.outputs.pr_number }} 
+      Out_pr_number: ${{ steps.extract_pr_number.outputs.pr_number }} 
     steps:
       - uses: actions/github-script@v6
         id: extract_pr_number
@@ -82,8 +82,8 @@ jobs:
     needs: [build, get-PR-number]         
     steps:
       - env:
-          PR_Number: ${{ needs.get_pr_number.outputs.pr_number }} 
-        run: echo "Input PR is $PR_Number"
+          PR_Number: ${{ needs.get_pr_number.outputs.Out_pr_number }} 
+        run: echo "$PR_Number"
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
