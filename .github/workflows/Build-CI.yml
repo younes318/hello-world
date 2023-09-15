@@ -53,30 +53,32 @@ jobs:
     outputs:
       pr_number: ${{ steps.extract_pr_number.outputs.pr_number }}
     steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          name: Install @octokit/rest
+          run: npm install @octokit/rest
+          
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Extract PR Number
         id: extract_pr_number
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { octokit } = require('@octokit/rest');
-            const mygithub = octokit({
-              auth: process.env.GITHUB_TOKEN,
-            });
+        run: |
+          const { Octokit } = require("@octokit/rest");
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-            const { data } = await mygithub.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: context.sha,
-            });
+          const { data } = await octokit.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            head: context.sha,
+          });
 
-            if (data.length > 0) {
-              console.log(`::set-output name=pr_number::${data[0].number}`);
-            } else {
-              console.log("No associated PR found.");
-            }       
+          if (data.length > 0) {
+            console.log(`::set-output name=pr_number::${data[0].number}`);
+          } else {
+            console.log("No associated PR found.");
+          }      
       - run: echo "The PR number is ${{ steps.get_pr_number.outputs.pr_number }}"
     
   notify-build:
