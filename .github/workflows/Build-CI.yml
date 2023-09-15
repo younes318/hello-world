@@ -58,7 +58,6 @@ jobs:
         
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
-            result-encoding: string
             script: |
               const commitSha = github.event.commits[0].sha;
               const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
