@@ -50,30 +50,26 @@ jobs:
   get-PR-number:
     name: get pull request info
     runs-on: ubuntu-latest
-    #outputs:
-      #pr_number: ${{ steps.get_pr_number.outputs.result }}
+    outputs:
+      pr_number: ${{ steps.get_pr_number.outputs.prNumber }}
     steps:      
       - uses: actions/github-script@v6
         id: get_pr_number
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-              if (context.issue.number) {
-                // Return issue number if present
-                return context.issue.number;
+              const commitSha = github.event.commits[0].sha;
+              const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              commit_sha,
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo
+                  });
+              if (prs.length > 0) {
+                const prNumber = prs[0].number;
+                echo "The PR number is $prNumber";
               } else {
-                // Otherwise return issue number from commit
-                return (
-                  await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                  commit_sha: context.sha,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                })
-                ).data[0];
+                echo "There is no PR associated with the push commit";
               }
-              result-encoding: string
-      - name: Issue number
-        run: echo "PR Number ${{ steps.get_pr_number.outputs.result }}"
         
   notify-build:
     name: notify build
