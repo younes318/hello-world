@@ -74,7 +74,7 @@ jobs:
       - name: Issue number
         run: |
           echo '${{ steps.extract_pr_number.outputs.result }}'
-          echo "::set-output name=pr_number::${{ steps.extract_pr_number.outputs.result }}"
+          echo "pr_number=${{ steps.extract_pr_number.outputs.result }}" >> "$GITHUB_OUTPUT"
     
   notify-build:
     name: notify build
