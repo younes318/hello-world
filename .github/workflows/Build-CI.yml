@@ -83,7 +83,7 @@ jobs:
     env:
           PR_Number: ${{ needs.get_pr_number.outputs.Out_pr_number }} 
     steps:      
-      - run: echo '${{ PR_Number }}'
+      - run: echo env.PR_Number
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
