@@ -88,20 +88,20 @@ jobs:
             const pr_number = process.env.PR_Number;
             echo "The env var is $pr_number";
             const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-            if(pr_number && pr_number != "")
-            {
-              await github.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr_number,
-                body: commentBody,
-                });
-             }
-             else
-             {
-               echo "PR number not found";
-               console.log("PR number not found");
-             }
+            #if(pr_number && pr_number != "")
+            #{
+              #await github.issues.createComment({
+                #owner: context.repo.owner,
+                #repo: context.repo.repo,
+                #issue_number: pr_number,
+                #body: commentBody,
+                #});
+             #}
+             #else
+             #{
+               #echo "PR number not found";
+               #console.log("PR number not found");
+             #}
           
      #- run: |
      #    curl 
