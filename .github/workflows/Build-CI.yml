@@ -68,7 +68,6 @@ jobs:
                           body: commentBody,
                       });
                       console.log('PR number is: $context.issue.number');
-                      github.setRepositoryVariable('CICD_PR_NUMBER', context.issue.number);
             } else {  
               const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
                                       commit_sha: context.sha,
@@ -84,7 +83,6 @@ jobs:
                           repo: context.repo.repo,                          
                           body: body,
                       });
-                      github.setRepositoryVariable('CICD_PR_NUMBER', data[0].number);
                       console.log('PR number is: ${data[0].number}');
                     }
             }
