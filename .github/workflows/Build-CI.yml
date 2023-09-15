@@ -53,6 +53,8 @@ jobs:
     outputs:
       pr_number: ${{ steps.extract_pr_number.outputs.pr_number }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Extract PR Number
         id: extract_pr_number
         uses: actions/github-script@v6
