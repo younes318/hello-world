@@ -51,35 +51,26 @@ jobs:
     name: get pull request info
     runs-on: ubuntu-latest  
     outputs:
-      pr_number: ${{ steps.extract_pr_number.outputs.pr_number }}
+      pr_number: ${{ steps.extract_pr_number.outputs.result }}
     steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          name: Install @octokit/rest
-          run: npm install @octokit/rest
-          
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Extract PR Number
+      - uses: actions/github-script@v6
         id: extract_pr_number
-        run: |
-          const { Octokit } = require("@octokit/rest");
-          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
-          const { data } = await octokit.pulls.list({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            head: context.sha,
-          });
-
-          if (data.length > 0) {
-            console.log(`::set-output name=pr_number::${data[0].number}`);
-          } else {
-            console.log("No associated PR found.");
-          }      
-      - run: echo "The PR number is ${{ steps.get_pr_number.outputs.pr_number }}"
+        with:
+          script: |
+            if (context.issue.number) {
+                return context.issue.number;
+            } else {
+            return (
+              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                    commit_sha: context.sha,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                  })
+                  ).data[0].number;
+            }
+          result-encoding: string
+      - name: Issue number
+        run: echo '${{steps.extract_pr_number.outputs.result}}'
     
   notify-build:
     name: notify build
