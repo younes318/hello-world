@@ -86,7 +86,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr_number = process.env.PR_Number;
-            echo "The env var is $pr_number";
+            echo "The env var is ${pr_number}";
             
           
      #- run: |
