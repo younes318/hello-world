@@ -62,8 +62,7 @@ jobs:
                 repo: github.context.repo.repo
               });
               if (prs.length > 0) {
-                const prNumber = prs[0].number;
-                #echo "The PR number is $prNumber";
+                const prNumber = prs[0].number;               
               } else {
                 echo "There is no PR associated with the push commit";
               }
