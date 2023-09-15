@@ -77,7 +77,6 @@ jobs:
                           body: commentBody,
                       });
             }
-            echo pr_number
             console.log("PR number is: ${pr_number} ");
 
   # testing:
