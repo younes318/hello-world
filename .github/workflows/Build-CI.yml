@@ -59,10 +59,10 @@ jobs:
           script: |            
             if (context.issue.number) {
                 const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-                await github.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
+                await github.rest.issues.createComment({
                           issue_number: context.issue.number,
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,                          
                           body: commentBody,
                       });
                       console.log('PR number is: $context.issue.number');
@@ -75,10 +75,10 @@ jobs:
                     if(data[0])
                     {
                       const body = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-                      await github.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
+                      await github.rest.issues.createComment({
                           issue_number: data[0].number,
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,                          
                           body: body,
                       });
                       console.log('PR number is: ${data[0].number}');
