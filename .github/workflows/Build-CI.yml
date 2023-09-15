@@ -71,7 +71,7 @@ jobs:
                 return "";
               }
               result-encoding: string
-      - run: echo "The PR number is"
+      - run: echo "The PR number is: ${{ get_pr_number.outputs.result }}"
     
   notify-build:
     name: notify build
