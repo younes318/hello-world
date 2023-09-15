@@ -83,19 +83,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = ${{ needs.get_pr_number.outputs.pr_number }}
             const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-            if(prNumber && prNumber != "")
+            if(${{ needs.get_pr_number.outputs.pr_number }} && ${{ needs.get_pr_number.outputs.pr_number }} != "")
             {
               await github.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: prNumber,
+                issue_number: ${{ needs.get_pr_number.outputs.pr_number }},
                 body: commentBody,
                 });
              }
              else
              {
+               echo "PR number not found";
                console.log("PR number not found");
              }
           
