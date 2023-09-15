@@ -53,14 +53,19 @@ jobs:
     needs: [build] 
     steps:
       - uses: actions/github-script@v6
-        env:
-          pr_number: ""
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |            
             if (context.issue.number) {
-                process.env.pr_number = context.issue.number;
+                const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
+                await github.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.issue.number,
+                          body: commentBody,
+                      });
+                      console.log('PR number is: $context.issue.number');
             } else {  
               const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
                                       commit_sha: context.sha,
@@ -68,20 +73,19 @@ jobs:
                                       repo: context.repo.repo,
                                     });
                     if(data[0])
-                      process.env.pr_number = data[0].number;
-            }
-            if((process.env.pr_number) && process.env.pr_number != "")
-            {
-              console.log('PR number has value: ${process.env.pr_number}');
-              const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
-              await github.issues.createComment({
+                    {
+                      const body = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
+                      await github.issues.createComment({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
-                          issue_number: process.env.pr_number,
-                          body: commentBody,
+                          issue_number: data[0].number,
+                          body: body,
                       });
+                      console.log('PR number is: ${data[0].number}');
+                    }
             }
-            console.log('PR number is: ${process.env.pr_number}');
+            
+            
 
   # testing:
   #   name: Deploy to testing
