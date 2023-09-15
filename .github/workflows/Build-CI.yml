@@ -83,7 +83,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = ${{ needs.get_pr_number.outputs.pr_number }};
+            const prNumber = ${{ needs.get_pr_number.outputs.pr_number }}
             const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
             if(prNumber && prNumber != "")
             {
