@@ -70,7 +70,7 @@ jobs:
                 echo "There is no PR associated with the push commit";
                 return "";
               }
-              result-encoding: string
+              
       - run: echo "The PR number is ${{ steps.get_pr_number.outputs.result }}"
     
   notify-build:
