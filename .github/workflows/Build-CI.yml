@@ -59,7 +59,7 @@ jobs:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
               const commitSha = github.event.commits[0].sha;
-              const prNumber ="";
+              const prNumber = "";
               const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               commit_sha,
               owner: github.context.repo.owner,
