@@ -58,7 +58,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
-          script: |            
+          script: |
+            const github = require('@actions/github');
+
             if (context.issue.number) {
                 const commentBody = "Workflow ${{ github.workflow }} (${{ github.sha }}) has completed and build finished with status ${{ job.status }}";
                 await github.rest.issues.createComment({
@@ -67,6 +69,7 @@ jobs:
                           repo: context.repo.repo,                          
                           body: commentBody,
                       });
+                      github.core.setOutput('Pr_Number', context.issue.number);
                       console.log('PR number is: $context.issue.number');
             } else {  
               const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
@@ -83,6 +86,7 @@ jobs:
                           repo: context.repo.repo,                          
                           body: body,
                       });
+                      github.core.setOutput('Pr_Number', data[0].number);
                       console.log('PR number is: ${data[0].number}');
                     }
             }
