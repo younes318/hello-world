@@ -67,7 +67,8 @@ jobs:
                           repo: context.repo.repo,                          
                           body: commentBody,
                       });
-                      github.core.setOutput('Pr_Number', context.issue.number);
+                      const fs = require('fs');
+                      fs.writeFileSync('variable.txt', context.issue.number);
                       console.log('PR number is: $context.issue.number');
             } else {  
               const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
@@ -84,11 +85,17 @@ jobs:
                           repo: context.repo.repo,                          
                           body: body,
                       });
-                      github.core.setOutput('Pr_Number', data[0].number);
+                      const fs = require('fs');
+                      fs.writeFileSync('variable.txt', data[0].number);
                       console.log('PR number is: ${data[0].number}');
                     }
             }
-            
+
+      - name: Upload Variable File
+        uses: actions/upload-artifact@v3
+        with:
+          name: variable-artifact
+          path: variable.txt
             
 
   # testing:
