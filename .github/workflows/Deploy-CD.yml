@@ -53,7 +53,7 @@ jobs:
 
       - name: Read Variable from File
         run: |
-          variable_value=$(cat variable-artifact/variable.txt)
+          variable_value=$(cat variable.txt)
           echo "Variable Value: $variable_value"
           echo "pr_number=$variable_value" >> $GITHUB_ENV
       - uses: actions/github-script@v6
