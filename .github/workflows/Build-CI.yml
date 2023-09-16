@@ -68,7 +68,7 @@ jobs:
                           body: commentBody,
                       });
                       const fs = require('fs');
-                      fs.writeFileSync('variable.txt', context.issue.number);
+                      fs.writeFileSync('variable.txt', '$context.issue.number');
                       console.log('PR number is: $context.issue.number');
             } else {  
               const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
@@ -86,7 +86,7 @@ jobs:
                           body: body,
                       });
                       const fs = require('fs');
-                      fs.writeFileSync('variable.txt', data[0].number);
+                      fs.writeFileSync('variable.txt', '$data[0].number');
                       console.log('PR number is: ${data[0].number}');
                     }
             }
