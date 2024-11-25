@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - name: Download artifacts
-       uses: dawidd6/action-download-artifact@v2
+       uses: dawidd6/action-download-artifact@v6
        with:
           name: my-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -46,7 +46,7 @@ jobs:
     needs: deploy-to-testing 
     steps:
       - name: Download Variable Artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: variable-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: my-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -102,7 +102,7 @@ jobs:
     needs: deploy-to-staging
     steps:
       - name: Download Variable Artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: variable-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -137,7 +137,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
         - name: Download artifacts
-          uses: dawidd6/action-download-artifact@v2
+          uses: dawidd6/action-download-artifact@v6
           with:
             name: my-artifact
             workflow: ${{ github.event.workflow_run.workflow_id }}
@@ -157,7 +157,7 @@ jobs:
     needs: deploy-to-production
     steps:
       - name: Download Variable Artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: variable-artifact
           workflow: ${{ github.event.workflow_run.workflow_id }}
